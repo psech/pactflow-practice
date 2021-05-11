@@ -6,6 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using qa_ct_backend.Models;
+using System;
+using System.Linq;
+using Microsoft.AspNetCore.Http;
 
 namespace qa_ct_backend
 {
@@ -20,8 +23,7 @@ namespace qa_ct_backend
 
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddDbContext<TodoContext>(opt =>
-                                         opt.UseInMemoryDatabase("TodoList"));
+      services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
       services.AddControllers();
     }
 
@@ -41,6 +43,22 @@ namespace qa_ct_backend
       {
         endpoints.MapControllers();
       });
+
+      // Seeding data
+      using (var serviceScope = app.ApplicationServices.CreateScope())
+      {
+        var dbContext = serviceScope.ServiceProvider.GetService<TodoContext>();
+
+        dbContext.TodoItems.Add(new TodoItem()
+        {
+          Id = 1,
+          Name = "Feed the cat",
+          IsComplete = false,
+          DateAdded = DateTime.Now
+        });
+
+        dbContext.SaveChanges();
+      }
     }
   }
 }
