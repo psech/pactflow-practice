@@ -21,6 +21,14 @@ namespace Todo.App.Controllers
     }
 
     // GET: api/TodoItems
+    ///
+    [HttpGet("all")]
+    public async Task<ActionResult<IEnumerable<TodoItem>>> GetAllTodoItems()
+    {
+      return await _context.TodoItems.ToListAsync();
+    }
+
+    // GET: api/TodoItems
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoItemDTO>>> GetTodoItems()
     {
@@ -82,7 +90,8 @@ namespace Todo.App.Controllers
       var todoItem = new TodoItem
       {
         IsComplete = todoItemDTO.IsComplete,
-        Name = todoItemDTO.Name
+        Name = todoItemDTO.Name,
+        DateAdded = DateTime.Now
       };
 
       _context.TodoItems.Add(todoItem);
