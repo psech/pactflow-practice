@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Swashbuckle.AspNetCore.Annotations;
 using Todo.App.Models;
 
 namespace Todo.App.Controllers
@@ -21,14 +22,7 @@ namespace Todo.App.Controllers
     }
 
     // GET: api/TodoItems
-    ///
-    [HttpGet("all")]
-    public async Task<ActionResult<IEnumerable<TodoItem>>> GetAllTodoItems()
-    {
-      return await _context.TodoItems.ToListAsync();
-    }
-
-    // GET: api/TodoItems
+    [SwaggerOperation(Summary = "Retrieve all the items")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoItemDTO>>> GetTodoItems()
     {
@@ -38,6 +32,7 @@ namespace Todo.App.Controllers
     }
 
     // GET: api/TodoItems/5
+    [SwaggerOperation(Summary = "Retrieve the specific item")]
     [HttpGet("{id}")]
     public async Task<ActionResult<TodoItemDTO>> GetTodoItem(long id)
     {
@@ -53,6 +48,7 @@ namespace Todo.App.Controllers
 
     // PUT: api/TodoItems/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [SwaggerOperation(Summary = "Update the specific item")]
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTodoItem(long id, TodoItemDTO todoItemDTO)
     {
@@ -84,6 +80,7 @@ namespace Todo.App.Controllers
 
     // POST: api/TodoItems
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [SwaggerOperation(Summary = "Create an item")]
     [HttpPost]
     public async Task<ActionResult<TodoItem>> CreateTodoItem(TodoItemDTO todoItemDTO)
     {
@@ -104,6 +101,7 @@ namespace Todo.App.Controllers
     }
 
     // DELETE: api/TodoItems/5
+    [SwaggerOperation(Summary = "Delete the specific item")]
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTodoItem(long id)
     {
@@ -118,6 +116,12 @@ namespace Todo.App.Controllers
 
       return NoContent();
     }
+
+    // GET: api/TodoItems/ditchDto
+    [ApiExplorerSettings(IgnoreApi = true)]
+    [HttpGet("ditchDto")]
+    public async Task<ActionResult<IEnumerable<TodoItem>>> GetAllTodoItems() =>
+      await _context.TodoItems.ToListAsync();
 
     private bool TodoItemExists(long id) =>
       _context.TodoItems.Any(e => e.Id == id);

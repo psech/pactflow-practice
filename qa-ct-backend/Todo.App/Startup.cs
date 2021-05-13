@@ -28,6 +28,7 @@ namespace Todo.App
       services.AddControllers();
       services.AddSwaggerGen(c =>
       {
+        c.EnableAnnotations();
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo Application", Version = "v1" });
       });
     }
