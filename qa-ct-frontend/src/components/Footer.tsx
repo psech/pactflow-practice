@@ -1,10 +1,16 @@
-import React from 'react';
+import React, { FC } from 'react';
 import PropTypes from 'prop-types';
-import FilterLink from '../components/Link';
+import FilterLink from './Link';
 
 const FILTER_TITLES = ['All', 'Active', 'Completed'];
 
-const Footer = (props) => {
+interface IFooterProps {
+  activeCount: number;
+  completedCount: number;
+  onClearCompleted: React.MouseEventHandler<HTMLButtonElement>;
+}
+
+const Footer: FC<IFooterProps> = (props) => {
   const { activeCount, completedCount, onClearCompleted } = props;
   const itemWord = activeCount === 1 ? 'item' : 'items';
   return (

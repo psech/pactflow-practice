@@ -7,7 +7,7 @@ const TodoList = () => {
   const { visibilityFilter } = useStore(TodoStore);
   return (
     <ul className="todo-list">
-      {getFilteredTodos(visibilityFilter).map((todo) => (
+      {getFilteredTodos(visibilityFilter).map((todo: { id: React.Key }) => (
         <TodoItem key={todo.id} todo={todo} />
       ))}
     </ul>

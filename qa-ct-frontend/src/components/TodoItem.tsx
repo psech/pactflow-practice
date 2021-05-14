@@ -4,7 +4,18 @@ import TodoTextInput from './TodoTextInput';
 
 import { editTodo, deleteTodo, completeTodo } from '../stores/todo';
 
-export default class TodoItem extends Component {
+interface ITodoItemProps {
+  todo: any;
+}
+
+interface ITodoItemState {
+  editing: boolean;
+}
+
+export default class TodoItem extends Component<
+  ITodoItemProps,
+  ITodoItemState
+> {
   state = {
     editing: false,
   };
@@ -13,7 +24,7 @@ export default class TodoItem extends Component {
     this.setState({ editing: true });
   };
 
-  handleSave = (id, text) => {
+  handleSave = (id: number, text: string) => {
     if (text.length === 0) {
       deleteTodo(id);
     } else {
@@ -31,7 +42,7 @@ export default class TodoItem extends Component {
         <TodoTextInput
           text={todo.text}
           editing={this.state.editing}
-          onSave={(text) => this.handleSave(todo.id, text)}
+          onSave={(text: string) => this.handleSave(todo.id, text)}
         />
       );
     } else {

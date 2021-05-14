@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { FC } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import { useStore } from 'laco-react';
 import { TodoStore, setVisibilityFilter } from '../stores/todo';
 
-const Link = ({ children, filter }) => {
+interface ILinkProps {
+  children: any;
+  filter: string;
+}
+
+const Link: FC<ILinkProps> = ({ children, filter }) => {
   const { visibilityFilter } = useStore(TodoStore);
 
   return (

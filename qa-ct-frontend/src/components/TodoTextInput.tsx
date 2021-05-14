@@ -2,7 +2,20 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-export default class TodoTextInput extends Component {
+interface ITodoTextInputProps {
+  text;
+  newTodo;
+  editing;
+  placeholder;
+  onSave: Function;
+}
+
+interface ITodoTextInputState {}
+
+export default class TodoTextInput extends Component<
+  ITodoTextInputProps,
+  ITodoTextInputState
+> {
   static propTypes = {
     onSave: PropTypes.func.isRequired,
     text: PropTypes.string,

@@ -4,7 +4,7 @@ export const TodoStore = new Store(
   {
     todos: [
       {
-        text: 'Use Laco',
+        text: 'Feed the cat',
         completed: false,
         id: 0,
       },
@@ -14,7 +14,7 @@ export const TodoStore = new Store(
   'TodoStore',
 );
 
-export const addTodo = (text) =>
+export const addTodo = (text: string) =>
   TodoStore.set(
     ({ todos }) => ({
       todos: [
@@ -29,7 +29,7 @@ export const addTodo = (text) =>
     'Add todo',
   );
 
-export const deleteTodo = (id) =>
+export const deleteTodo = (id: number) =>
   TodoStore.set(
     ({ todos }) => ({
       todos: todos.filter((item) => item.id !== id),
