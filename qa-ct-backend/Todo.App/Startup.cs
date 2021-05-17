@@ -60,8 +60,8 @@ namespace Todo.App
         dbContext.TodoItems.Add(new TodoItem()
         {
           Id = 1,
-          Name = "Feed the cat",
-          IsComplete = false,
+          Text = "Feed the cat",
+          Completed = false,
           DateAdded = DateTime.Now
         });
 
