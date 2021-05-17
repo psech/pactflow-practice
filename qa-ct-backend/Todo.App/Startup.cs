@@ -15,6 +15,8 @@ namespace Todo.App
 {
   public class Startup
   {
+    readonly string CorsAllowAllOrigins = "allowAllOrigins";
+
     public Startup(IConfiguration configuration)
     {
       Configuration = configuration;
@@ -26,10 +28,16 @@ namespace Todo.App
     {
       services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
       services.AddControllers();
+
       services.AddSwaggerGen(c =>
       {
         c.EnableAnnotations();
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "Todo Application", Version = "v1" });
+      });
+
+      services.AddCors(options =>
+      {
+        options.AddPolicy(name: CorsAllowAllOrigins, builder => { builder.WithOrigins("*"); });
       });
     }
 
@@ -44,13 +52,14 @@ namespace Todo.App
 
       app.UseHttpsRedirection();
       app.UseRouting();
-
+      app.UseCors(CorsAllowAllOrigins);
       app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>
       {
         endpoints.MapControllers();
       });
+
 
       // Seeding data
       using (var serviceScope = app.ApplicationServices.CreateScope())
@@ -60,8 +69,16 @@ namespace Todo.App
         dbContext.TodoItems.Add(new TodoItem()
         {
           Id = 1,
-          Text = "Feed the cat",
+          Text = "Test all the things",
           Completed = false,
+          DateAdded = DateTime.Now.AddDays(-1)
+        });
+
+        dbContext.TodoItems.Add(new TodoItem()
+        {
+          Id = 2,
+          Text = "Feed the cat",
+          Completed = true,
           DateAdded = DateTime.Now
         });
 
