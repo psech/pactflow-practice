@@ -37,7 +37,10 @@ namespace Todo.App
 
       services.AddCors(options =>
       {
-        options.AddPolicy(name: CorsAllowAllOrigins, builder => { builder.WithOrigins("*"); });
+        options.AddPolicy(name: CorsAllowAllOrigins, builder =>
+        {
+          builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+        });
       });
     }
 
