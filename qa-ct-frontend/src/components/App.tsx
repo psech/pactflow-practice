@@ -24,7 +24,6 @@ const App: FC = () => {
   };
 
   const handleDeleteTodo = (id: number) => {
-    console.log(`Delete attmept, id=${id}`);
     deleteTodo(id)
       .then(() =>
         setTodos((prev: ITodo[]) =>
@@ -35,7 +34,6 @@ const App: FC = () => {
   };
 
   const handleEditTodo = (todo: ITodo, text: string) => {
-    console.log(`Edit attmept, id=${todo.id}`);
     todo = { ...todo, text: text };
     updateTodo(todo)
       .then(() =>
@@ -47,7 +45,6 @@ const App: FC = () => {
   };
 
   const handlecompleteTodo = (todo: ITodo) => {
-    console.log(`Edit attmept, id=${todo.id}`);
     todo = { ...todo, completed: !todo.completed };
     updateTodo(todo)
       .then(() =>
