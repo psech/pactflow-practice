@@ -1,7 +1,7 @@
 import React, { FC, PropsWithChildren } from 'react';
 import TodoItem from './TodoItem';
 
-import { FilterTitlesEnum, getFilteredTodos } from '../api/helpers';
+import { getFilteredTodos } from '../api/helpers';
 import { ITodo } from '../api/type';
 
 interface ITodoListProps {
@@ -9,16 +9,15 @@ interface ITodoListProps {
   handleDeleteTodo: (arg0: number) => void;
   handleEditTodo: (arg0: ITodo, arg1: string) => void;
   handleCompleteTodo: (arg0: ITodo) => void;
+  visibilityFilter: string;
 }
 
 const TodoList: FC<ITodoListProps> = (
   props: PropsWithChildren<ITodoListProps>,
 ) => {
-  const visibilityFilter = FilterTitlesEnum.All;
-
   return (
     <ul className="todo-list">
-      {getFilteredTodos(props.todos, visibilityFilter).map(
+      {getFilteredTodos(props.todos, props.visibilityFilter).map(
         (todo: { id: React.Key }) => (
           <TodoItem
             key={todo.id}

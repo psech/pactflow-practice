@@ -1,32 +1,26 @@
-import React, { FC } from 'react';
-import PropTypes from 'prop-types';
+import { FC, PropsWithChildren } from 'react';
 import classnames from 'classnames';
-import { useStore } from 'laco-react';
-import { TodoStore, setVisibilityFilter } from '../stores/todo';
 
 interface ILinkProps {
   children: any;
   filter: string;
+  visibilityFilter: string;
+  setVisibilityFilter: (arg0: string) => void;
 }
 
-const Link: FC<ILinkProps> = ({ children, filter }) => {
-  const { visibilityFilter } = useStore(TodoStore);
-
+const Link: FC<ILinkProps> = (props: PropsWithChildren<ILinkProps>) => {
   return (
     <a
       href="/#"
-      className={classnames({ selected: filter === visibilityFilter })}
+      className={classnames({
+        selected: props.filter === props.visibilityFilter,
+      })}
       style={{ cursor: 'pointer' }}
-      onClick={() => setVisibilityFilter(filter)}
+      onClick={() => props.setVisibilityFilter(props.filter)}
     >
-      {children}
+      {props.children}
     </a>
   );
-};
-
-Link.propTypes = {
-  children: PropTypes.node.isRequired,
-  filter: PropTypes.string.isRequired,
 };
 
 export default Link;

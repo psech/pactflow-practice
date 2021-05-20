@@ -1,13 +1,16 @@
 import React, { FC } from 'react';
-import PropTypes from 'prop-types';
 import FilterLink from './Link';
 
-const FILTER_TITLES = ['All', 'Active', 'Completed'];
+import { FilterTitlesEnum } from '../api/helpers';
+
+const FILTER_TITLES = Object.keys(FilterTitlesEnum);
 
 interface IFooterProps {
   activeCount: number;
   completedCount: number;
   onClearCompleted: React.MouseEventHandler<HTMLButtonElement>;
+  visibilityFilter;
+  setVisibilityFilter;
 }
 
 const Footer: FC<IFooterProps> = (props) => {
@@ -21,7 +24,13 @@ const Footer: FC<IFooterProps> = (props) => {
       <ul className="filters">
         {FILTER_TITLES.map((filter) => (
           <li key={filter}>
-            <FilterLink filter={filter}>{filter}</FilterLink>
+            <FilterLink
+              filter={filter}
+              visibilityFilter={props.visibilityFilter}
+              setVisibilityFilter={props.setVisibilityFilter}
+            >
+              {filter}
+            </FilterLink>
           </li>
         ))}
       </ul>
@@ -32,12 +41,6 @@ const Footer: FC<IFooterProps> = (props) => {
       )}
     </footer>
   );
-};
-
-Footer.propTypes = {
-  completedCount: PropTypes.number.isRequired,
-  activeCount: PropTypes.number.isRequired,
-  onClearCompleted: PropTypes.func.isRequired,
 };
 
 export default Footer;
