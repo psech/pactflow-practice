@@ -1,15 +1,26 @@
-import React, { FC } from 'react';
+import React, { FC, PropsWithChildren } from 'react';
 import TodoItem from './TodoItem';
-import { useStore } from 'laco-react';
-import { TodoStore, getFilteredTodos } from '../stores/todo';
 
-const TodoList: FC = () => {
-  const { visibilityFilter } = useStore(TodoStore);
+import { FilterTitlesEnum, getFilteredTodos } from '../api/helpers';
+import { ITodo } from '../api/type';
+
+interface ITodoListProps {
+  todos: ITodo[];
+}
+
+const TodoList: FC<ITodoListProps> = (
+  props: PropsWithChildren<ITodoListProps>,
+) => {
+  // const { visibilityFilter } = useStore(TodoStore);
+  const visibilityFilter = FilterTitlesEnum.All;
+
   return (
     <ul className="todo-list">
-      {getFilteredTodos(visibilityFilter).map((todo: { id: React.Key }) => (
-        <TodoItem key={todo.id} todo={todo} />
-      ))}
+      {getFilteredTodos(props.todos, visibilityFilter).map(
+        (todo: { id: React.Key }) => (
+          <TodoItem key={todo.id} todo={todo} />
+        ),
+      )}
     </ul>
   );
 };

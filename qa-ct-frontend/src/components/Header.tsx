@@ -1,15 +1,23 @@
-import React, { FC } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import TodoTextInput from './TodoTextInput';
-import { addTodo } from '../stores/todo';
+import { ITodo } from '../api/type';
 
-const Header: FC = () => (
+interface IHeaderProps {
+  handleAddTodos: Function;
+}
+
+const Header: FC<IHeaderProps> = (props: PropsWithChildren<IHeaderProps>) => (
   <header className="header">
     <h1>todos</h1>
     <TodoTextInput
       newTodo
       onSave={(text: string) => {
         if (text.length !== 0) {
-          addTodo(text);
+          const todo: Omit<ITodo, 'id'> = {
+            text: text,
+            completed: false,
+          };
+          props.handleAddTodos(todo);
         }
       }}
       placeholder="What needs to be done?"

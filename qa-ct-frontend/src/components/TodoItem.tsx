@@ -2,7 +2,7 @@ import { FC, useState, PropsWithChildren } from 'react';
 import classnames from 'classnames';
 import TodoTextInput from './TodoTextInput';
 
-import { editTodo, deleteTodo, completeTodo } from '../stores/todo';
+// import { editTodo, deleteTodo, completeTodo } from '../stores/todo';
 
 interface ITodoItemProps {
   todo: any;
@@ -13,16 +13,16 @@ const TodoItem: FC<ITodoItemProps> = (
 ) => {
   const [editing, setEditing] = useState<boolean>(false);
 
-  const handleDoubleClick = (): void => setEditing(true);
+  // const handleDoubleClick = (): void => setEditing(true);
 
-  const handleSave = (id: number, text: string) => {
-    if (text.length === 0) {
-      deleteTodo(id);
-    } else {
-      editTodo(id, text);
-    }
-    setEditing(false);
-  };
+  // const handleSave = (id: number, text: string) => {
+  //   if (text.length === 0) {
+  //     deleteTodo(id);
+  //   } else {
+  //     editTodo(id, text);
+  //   }
+  //   setEditing(false);
+  // };
 
   const { todo } = props;
 
@@ -32,7 +32,10 @@ const TodoItem: FC<ITodoItemProps> = (
       <TodoTextInput
         text={todo.text}
         editing={editing}
-        onSave={(text: string) => handleSave(todo.id, text)}
+        // onSave={(text: string) => handleSave(todo.id, text)}
+        onSave={(text: string) =>
+          console.log(`Save has been confirmed, id=${todo.id}`)
+        }
       />
     );
   } else {
@@ -42,10 +45,24 @@ const TodoItem: FC<ITodoItemProps> = (
           className="toggle"
           type="checkbox"
           checked={todo.completed}
-          onChange={() => completeTodo(todo.id)}
+          // onChange={() => completeTodo(todo.id)}
+          onChange={() =>
+            console.log(`Checkbox has been clicked, id=${todo.id}`)
+          }
         />
-        <label onDoubleClick={handleDoubleClick}>{todo.text}</label>
-        <button className="destroy" onClick={() => deleteTodo(todo.id)} />
+        {/* <label onDoubleClick={handleDoubleClick}>{todo.text}</label> */}
+        <label
+          onDoubleClick={() =>
+            console.log(`Text has been double clicked, id=${todo.id}`)
+          }
+        >
+          {todo.text}
+        </label>
+        {/* <button className="destroy" onClick={() => deleteTodo(todo.id)} /> */}
+        <button
+          className="destroy"
+          onClick={() => console.log(`Delete has been clicked, id=${todo.id}`)}
+        />
       </div>
     );
   }

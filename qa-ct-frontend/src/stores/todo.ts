@@ -4,9 +4,14 @@ export const TodoStore = new Store(
   {
     todos: [
       {
+        id: 0,
         text: 'Feed the cat',
         completed: false,
-        id: 0,
+      },
+      {
+        id: 1,
+        text: 'Walk the dog',
+        completed: false,
       },
     ],
     visibilityFilter: 'All',
