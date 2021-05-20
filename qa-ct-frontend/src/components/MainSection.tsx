@@ -1,19 +1,17 @@
 import { FC, PropsWithChildren } from 'react';
 import Footer from './Footer';
 import TodoList from './TodoList';
-import {
-  completeAllTodos,
-  clearCompletedTodos,
-  getCompletedCount,
-} from '../stores/todo';
 
+import { getCompletedCount } from '../api/helpers';
 import { ITodo } from '../api/type';
 
 interface IMainSectionProps {
   todos: ITodo[];
   handleDeleteTodo: (arg0: number) => void;
   handleEditTodo: (arg0: ITodo, arg1: string) => void;
-  handlecompleteTodo: (arg0: ITodo) => void;
+  handleCompleteTodo: (arg0: ITodo) => void;
+  handleClearCompletedTodos: () => void;
+  handleCompleteAllTodos: () => void;
 }
 
 const MainSection: FC<IMainSectionProps> = (
@@ -31,20 +29,26 @@ const MainSection: FC<IMainSectionProps> = (
             type="checkbox"
             defaultChecked={completedCount === todosCount}
           />
-          <label onClick={completeAllTodos} />
+          <label
+            onClick={() => {
+              console.log('Attempt completing all todos');
+
+              props.handleCompleteAllTodos();
+            }}
+          />
         </span>
       )}
       <TodoList
         todos={todos}
         handleDeleteTodo={props.handleDeleteTodo}
         handleEditTodo={props.handleEditTodo}
-        handlecompleteTodo={props.handlecompleteTodo}
+        handleCompleteTodo={props.handleCompleteTodo}
       />
       {!!todosCount && (
         <Footer
           completedCount={completedCount}
           activeCount={todosCount - completedCount}
-          onClearCompleted={clearCompletedTodos}
+          onClearCompleted={props.handleClearCompletedTodos}
         />
       )}
     </section>

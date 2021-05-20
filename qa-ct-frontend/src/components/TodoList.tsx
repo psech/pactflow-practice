@@ -8,7 +8,7 @@ interface ITodoListProps {
   todos: ITodo[];
   handleDeleteTodo: (arg0: number) => void;
   handleEditTodo: (arg0: ITodo, arg1: string) => void;
-  handlecompleteTodo: (arg0: ITodo) => void;
+  handleCompleteTodo: (arg0: ITodo) => void;
 }
 
 const TodoList: FC<ITodoListProps> = (
@@ -25,7 +25,7 @@ const TodoList: FC<ITodoListProps> = (
             todo={todo}
             handleDeleteTodo={props.handleDeleteTodo}
             handleEditTodo={props.handleEditTodo}
-            handlecompleteTodo={props.handlecompleteTodo}
+            handleCompleteTodo={props.handleCompleteTodo}
           />
         ),
       )}

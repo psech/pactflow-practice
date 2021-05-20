@@ -44,7 +44,7 @@ const App: FC = () => {
       .catch((error: Error) => console.log(error));
   };
 
-  const handlecompleteTodo = (todo: ITodo) => {
+  const handleCompleteTodo = (todo: ITodo) => {
     todo = { ...todo, completed: !todo.completed };
     updateTodo(todo)
       .then(() =>
@@ -55,6 +55,24 @@ const App: FC = () => {
       .catch((error: Error) => console.log(error));
   };
 
+  const handleClearCompletedTodos = () => {
+    const todosToClear: ITodo[] = todos.filter((todo) => todo.completed);
+    const todossToKeep: ITodo[] = todos.filter((todo) => !todo.completed);
+    Promise.all(todosToClear.map((todo) => deleteTodo(todo.id)))
+      .then(() => setTodos(todossToKeep))
+      .catch((error: Error) => console.log(error));
+  };
+
+  const handleCompleteAllTodos = () => {
+    const newTodos: ITodo[] = todos.map((todo: ITodo) => ({
+      ...todo,
+      completed: true,
+    }));
+    Promise.all(newTodos.map((todo: ITodo) => updateTodo(todo)))
+      .then(() => setTodos(newTodos))
+      .catch((error: Error) => console.log(error));
+  };
+
   return (
     <div>
       <Header handleAddTodos={handleAddTodos} />
@@ -62,7 +80,9 @@ const App: FC = () => {
         todos={todos}
         handleDeleteTodo={handleDeleteTodo}
         handleEditTodo={handleEditTodo}
-        handlecompleteTodo={handlecompleteTodo}
+        handleCompleteTodo={handleCompleteTodo}
+        handleClearCompletedTodos={handleClearCompletedTodos}
+        handleCompleteAllTodos={handleCompleteAllTodos}
       />
     </div>
   );

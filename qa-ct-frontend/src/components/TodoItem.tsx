@@ -7,7 +7,7 @@ interface ITodoItemProps {
   todo: any;
   handleDeleteTodo: (arg0: number) => void;
   handleEditTodo: (arg0: ITodo, arg1: string) => void;
-  handlecompleteTodo: (arg0: ITodo) => void;
+  handleCompleteTodo: (arg0: ITodo) => void;
 }
 
 const TodoItem: FC<ITodoItemProps> = (
@@ -40,7 +40,7 @@ const TodoItem: FC<ITodoItemProps> = (
         className="toggle"
         type="checkbox"
         checked={todo.completed}
-        onChange={() => props.handlecompleteTodo(todo)}
+        onChange={() => props.handleCompleteTodo(todo)}
       />
       <label onDoubleClick={handleDoubleClick}>{todo.text}</label>
       <button

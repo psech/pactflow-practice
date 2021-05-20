@@ -18,3 +18,6 @@ export const getFilteredTodos = (todos: ITodo[], visibilityFilter: string) => {
       throw new Error('Unknown filter: ' + visibilityFilter);
   }
 };
+
+export const getCompletedCount = (todos: ITodo[]) =>
+  todos.reduce((count, todo) => (todo.completed ? count + 1 : count), 0);
