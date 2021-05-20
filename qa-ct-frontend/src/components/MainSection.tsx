@@ -1,4 +1,4 @@
-import React, { FC, PropsWithChildren } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import Footer from './Footer';
 import TodoList from './TodoList';
 import {
@@ -11,6 +11,9 @@ import { ITodo } from '../api/type';
 
 interface IMainSectionProps {
   todos: ITodo[];
+  handleDeleteTodo: (arg0: number) => void;
+  handleEditTodo: (arg0: ITodo, arg1: string) => void;
+  handlecompleteTodo: (arg0: ITodo) => void;
 }
 
 const MainSection: FC<IMainSectionProps> = (
@@ -31,7 +34,12 @@ const MainSection: FC<IMainSectionProps> = (
           <label onClick={completeAllTodos} />
         </span>
       )}
-      <TodoList todos={todos} />
+      <TodoList
+        todos={todos}
+        handleDeleteTodo={props.handleDeleteTodo}
+        handleEditTodo={props.handleEditTodo}
+        handlecompleteTodo={props.handlecompleteTodo}
+      />
       {!!todosCount && (
         <Footer
           completedCount={completedCount}

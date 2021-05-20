@@ -6,19 +6,27 @@ import { ITodo } from '../api/type';
 
 interface ITodoListProps {
   todos: ITodo[];
+  handleDeleteTodo: (arg0: number) => void;
+  handleEditTodo: (arg0: ITodo, arg1: string) => void;
+  handlecompleteTodo: (arg0: ITodo) => void;
 }
 
 const TodoList: FC<ITodoListProps> = (
   props: PropsWithChildren<ITodoListProps>,
 ) => {
-  // const { visibilityFilter } = useStore(TodoStore);
   const visibilityFilter = FilterTitlesEnum.All;
 
   return (
     <ul className="todo-list">
       {getFilteredTodos(props.todos, visibilityFilter).map(
         (todo: { id: React.Key }) => (
-          <TodoItem key={todo.id} todo={todo} />
+          <TodoItem
+            key={todo.id}
+            todo={todo}
+            handleDeleteTodo={props.handleDeleteTodo}
+            handleEditTodo={props.handleEditTodo}
+            handlecompleteTodo={props.handlecompleteTodo}
+          />
         ),
       )}
     </ul>

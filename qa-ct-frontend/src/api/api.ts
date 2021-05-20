@@ -49,7 +49,7 @@ export const updateTodo = async (
 };
 
 export const deleteTodo = async (
-  id: string,
+  id: number,
 ): Promise<AxiosResponse<ApiDataType>> => {
   try {
     const deleteTodo: AxiosResponse<ApiDataType> = await axios.delete(
