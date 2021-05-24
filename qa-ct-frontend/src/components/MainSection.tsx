@@ -33,13 +33,7 @@ const MainSection: FC<IMainSectionProps> = (
             type="checkbox"
             defaultChecked={completedCount === todosCount}
           />
-          <label
-            onClick={() => {
-              console.log('Attempt completing all todos');
-
-              props.handleCompleteAllTodos();
-            }}
-          />
+          <label onClick={props.handleCompleteAllTodos} />
         </span>
       )}
       <TodoList
