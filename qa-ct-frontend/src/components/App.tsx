@@ -5,6 +5,7 @@ import 'todomvc-app-css/index.css';
 
 import { ITodo } from '../api/type';
 import { addTodo, deleteTodo, getTodos, updateTodo } from '../api/api';
+import { FilterTitlesEnum, getFilteredTodos } from '../api/helpers';
 
 const App: FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
@@ -56,8 +57,14 @@ const App: FC = () => {
   };
 
   const handleClearCompletedTodos = () => {
-    const todosToClear: ITodo[] = todos.filter((todo) => todo.completed);
-    const todossToKeep: ITodo[] = todos.filter((todo) => !todo.completed);
+    const todosToClear: ITodo[] = getFilteredTodos(
+      todos,
+      FilterTitlesEnum.Completed,
+    );
+    const todossToKeep: ITodo[] = getFilteredTodos(
+      todos,
+      FilterTitlesEnum.Active,
+    );
     Promise.all(todosToClear.map((todo) => deleteTodo(todo.id)))
       .then(() => setTodos(todossToKeep))
       .catch((error: Error) => console.log(error));
