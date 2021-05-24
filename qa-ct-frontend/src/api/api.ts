@@ -1,14 +1,16 @@
 import axios, { AxiosResponse } from 'axios';
 
-import type { ITodo, ApiDataType } from '../api/type';
+import type { ITodo } from '../api/type';
 
 const baseUrl: string = 'https://localhost:5001/api';
 
-export const getTodos = async (): Promise<AxiosResponse<ApiDataType>> => {
+export const getTodos = async (): Promise<ITodo[]> => {
   try {
-    const todos: AxiosResponse<ApiDataType> = await axios.get(
+    const resp: AxiosResponse<ITodo[]> = await axios.get(
       `${baseUrl}/TodoItems`,
     );
+
+    const { data: todos } = resp;
 
     return todos;
   } catch (error) {
@@ -35,9 +37,9 @@ export const addTodo = async (
 
 export const updateTodo = async (
   todo: ITodo,
-): Promise<AxiosResponse<ApiDataType>> => {
+): Promise<AxiosResponse<ITodo>> => {
   try {
-    const updateTodo: AxiosResponse<ApiDataType> = await axios.put(
+    const updateTodo: AxiosResponse<ITodo> = await axios.put(
       `${baseUrl}/TodoItems/${todo.id}`,
       todo,
     );
@@ -48,11 +50,9 @@ export const updateTodo = async (
   }
 };
 
-export const deleteTodo = async (
-  id: number,
-): Promise<AxiosResponse<ApiDataType>> => {
+export const deleteTodo = async (id: number): Promise<AxiosResponse> => {
   try {
-    const deleteTodo: AxiosResponse<ApiDataType> = await axios.delete(
+    const deleteTodo: AxiosResponse = await axios.delete(
       `${baseUrl}/TodoItems/${id}`,
     );
 

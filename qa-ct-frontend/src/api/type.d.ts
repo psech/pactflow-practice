@@ -7,10 +7,3 @@ export interface ITodo {
 export type TodoProps = {
   todo: ITodo;
 };
-
-export type ApiDataType = {
-  message: string;
-  status: string;
-  todos: ITodo[];
-  todo?: ITodo;
-};

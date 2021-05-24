@@ -11,7 +11,7 @@ const App: FC = () => {
 
   useEffect(() => {
     getTodos()
-      .then(({ data }: ITodo[] | any) => setTodos(data))
+      .then((todos: ITodo[]) => setTodos(todos))
       .catch((error: Error) => console.log(console.log(error)));
   }, []);
 
