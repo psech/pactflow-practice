@@ -63,8 +63,8 @@ namespace Todo.App.Controllers
         return NotFound();
       }
 
-      todoItem.Name = todoItemDTO.Name;
-      todoItem.IsComplete = todoItemDTO.IsComplete;
+      todoItem.Text = todoItemDTO.Text;
+      todoItem.Completed = todoItemDTO.Completed;
 
       try
       {
@@ -86,8 +86,8 @@ namespace Todo.App.Controllers
     {
       var todoItem = new TodoItem
       {
-        IsComplete = todoItemDTO.IsComplete,
-        Name = todoItemDTO.Name,
+        Completed = todoItemDTO.Completed,
+        Text = todoItemDTO.Text,
         DateAdded = DateTime.Now
       };
 
@@ -129,8 +129,8 @@ namespace Todo.App.Controllers
     private static TodoItemDTO ItemToDTO(TodoItem todoItem) => new TodoItemDTO
     {
       Id = todoItem.Id,
-      Name = todoItem.Name,
-      IsComplete = todoItem.IsComplete
+      Text = todoItem.Text,
+      Completed = todoItem.Completed
     };
   }
 }
