@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Todo.App.Models;
 using Xunit;
 
-namespace Todo.Tests
+namespace Todo.UnitTests
 {
   public class DbTests
   {
