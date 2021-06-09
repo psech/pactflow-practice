@@ -5,7 +5,7 @@ import {
   Publisher,
 } from '@pact-foundation/pact';
 import { PublisherOptions } from '@pact-foundation/pact-node';
-import { like } from '@pact-foundation/pact/src/dsl/matchers';
+import { like, regex } from '@pact-foundation/pact/src/dsl/matchers';
 
 import { ITodo } from '../../api/type';
 import { API } from '../../api/api';
@@ -13,7 +13,7 @@ import { API } from '../../api/api';
 const opts: PublisherOptions = {
   pactBroker: process.env.PACT_BROKER_BASE_URL || '',
   pactBrokerToken: process.env.PACT_BROKER_TOKEN,
-  consumerVersion: '0.1.0',
+  consumerVersion: '0.1.1',
   pactFilesOrDirs: ['./pacts'],
 };
 
@@ -63,6 +63,12 @@ describe('Pact with TODO API', () => {
           willRespondWith: {
             status: 200,
             body: like(expectedTodos),
+            headers: {
+              'Content-Type': regex({
+                generate: 'application/json; charset=utf-8',
+                matcher: 'application/json;?.*',
+              }),
+            },
           },
         };
 
@@ -94,6 +100,12 @@ describe('Pact with TODO API', () => {
           willRespondWith: {
             status: 200,
             body: like(expectedTodo),
+            headers: {
+              'Content-Type': regex({
+                generate: 'application/json; charset=utf-8',
+                matcher: 'application/json;?.*',
+              }),
+            },
           },
         };
 
