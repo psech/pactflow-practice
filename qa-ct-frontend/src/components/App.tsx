@@ -1,23 +1,27 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useMemo, useState } from 'react';
 import Header from './Header';
 import MainSection from './MainSection';
 import 'todomvc-app-css/index.css';
 
 import { ITodo } from '../api/type';
-import { addTodo, deleteTodo, getTodos, updateTodo } from '../api/api';
+import { API } from '../api/api';
 import { FilterTitlesEnum, getFilteredTodos } from '../api/helpers';
 
 const App: FC = () => {
   const [todos, setTodos] = useState<ITodo[]>([]);
 
+  const api = useMemo(() => new API(), []);
+
   useEffect(() => {
-    getTodos()
+    api
+      .getTodos()
       .then((todos: ITodo[]) => setTodos(todos))
       .catch((error: Error) => console.log(console.log(error)));
-  }, []);
+  }, [api]);
 
   const handleAddTodos = (todo: ITodo) => {
-    addTodo(todo)
+    api
+      .addTodo(todo)
       .then((response) => {
         setTodos((prev: ITodo[]) => prev.concat(response.data));
       })
@@ -25,7 +29,8 @@ const App: FC = () => {
   };
 
   const handleDeleteTodo = (id: number) => {
-    deleteTodo(id)
+    api
+      .deleteTodo(id)
       .then(() =>
         setTodos((prev: ITodo[]) =>
           prev.filter((todo: ITodo) => todo.id !== id),
@@ -36,7 +41,8 @@ const App: FC = () => {
 
   const handleEditTodo = (todo: ITodo, text: string) => {
     todo = { ...todo, text: text };
-    updateTodo(todo)
+    api
+      .updateTodo(todo)
       .then(() =>
         setTodos((prev: ITodo[]) =>
           prev.map((el: ITodo) => (el.id === todo.id ? todo : el)),
@@ -47,7 +53,8 @@ const App: FC = () => {
 
   const handleCompleteTodo = (todo: ITodo) => {
     todo = { ...todo, completed: !todo.completed };
-    updateTodo(todo)
+    api
+      .updateTodo(todo)
       .then(() =>
         setTodos((prev: ITodo[]) =>
           prev.map((el: ITodo) => (el.id === todo.id ? todo : el)),
@@ -65,7 +72,7 @@ const App: FC = () => {
       todos,
       FilterTitlesEnum.Active,
     );
-    Promise.all(todosToClear.map((todo) => deleteTodo(todo.id)))
+    Promise.all(todosToClear.map((todo) => api.deleteTodo(todo.id)))
       .then(() => setTodos(todossToKeep))
       .catch((error: Error) => console.log(error));
   };
@@ -75,7 +82,7 @@ const App: FC = () => {
       ...todo,
       completed: true,
     }));
-    Promise.all(newTodos.map((todo: ITodo) => updateTodo(todo)))
+    Promise.all(newTodos.map((todo: ITodo) => api.updateTodo(todo)))
       .then(() => setTodos(newTodos))
       .catch((error: Error) => console.log(error));
   };

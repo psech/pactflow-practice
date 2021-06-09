@@ -1,63 +1,87 @@
 import axios, { AxiosResponse } from 'axios';
-
+import adapter from 'axios/lib/adapters/http';
 import type { ITodo } from '../api/type';
 
-const baseUrl: string = 'https://localhost:5001/api';
+axios.defaults.adapter = adapter;
 
-export const getTodos = async (): Promise<ITodo[]> => {
-  try {
-    const resp: AxiosResponse<ITodo[]> = await axios.get(
-      `${baseUrl}/TodoItems`,
-    );
+export class API {
+  constructor(private baseUrl: string = 'https://localhost:5001/api') {
+    try {
+      new URL(baseUrl);
+    } catch (error) {
+      throw new Error(error);
+    }
 
-    const { data: todos } = resp;
-
-    return todos;
-  } catch (error) {
-    throw new Error(error);
+    this.baseUrl = baseUrl;
   }
-};
 
-export const addTodo = async (
-  todo: Omit<ITodo, 'id'>,
-): Promise<AxiosResponse<ITodo>> => {
-  try {
-    const newTodo: Omit<ITodo, 'id'> = todo;
+  public getTodos = async (): Promise<ITodo[]> => {
+    try {
+      const resp: AxiosResponse<ITodo[]> = await axios.get(
+        `${this.baseUrl}/TodoItems`,
+      );
 
-    const saveTodo: AxiosResponse<ITodo> = await axios.post<ITodo>(
-      `${baseUrl}/TodoItems`,
-      newTodo,
-    );
+      const { data: todos } = resp;
 
-    return saveTodo;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
+      return todos;
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 
-export const updateTodo = async (
-  todo: ITodo,
-): Promise<AxiosResponse<ITodo>> => {
-  try {
-    const updateTodo: AxiosResponse<ITodo> = await axios.put(
-      `${baseUrl}/TodoItems/${todo.id}`,
-      todo,
-    );
+  public getTodo = async (id: number): Promise<ITodo> => {
+    try {
+      const resp: AxiosResponse<ITodo> = await axios.get(
+        `${this.baseUrl}/TodoItems/${id}`,
+      );
 
-    return updateTodo;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
+      const { data: todo } = resp;
 
-export const deleteTodo = async (id: number): Promise<AxiosResponse> => {
-  try {
-    const deleteTodo: AxiosResponse = await axios.delete(
-      `${baseUrl}/TodoItems/${id}`,
-    );
+      return todo;
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
 
-    return deleteTodo;
-  } catch (error) {
-    throw new Error(error);
-  }
-};
+  public addTodo = async (
+    todo: Omit<ITodo, 'id'>,
+  ): Promise<AxiosResponse<ITodo>> => {
+    try {
+      const newTodo: Omit<ITodo, 'id'> = todo;
+
+      const saveTodo: AxiosResponse<ITodo> = await axios.post<ITodo>(
+        `${this.baseUrl}/TodoItems`,
+        newTodo,
+      );
+
+      return saveTodo;
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  public updateTodo = async (todo: ITodo): Promise<AxiosResponse<ITodo>> => {
+    try {
+      const updateTodo: AxiosResponse<ITodo> = await axios.put(
+        `${this.baseUrl}/TodoItems/${todo.id}`,
+        todo,
+      );
+
+      return updateTodo;
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+
+  public deleteTodo = async (id: number): Promise<AxiosResponse> => {
+    try {
+      const deleteTodo: AxiosResponse = await axios.delete(
+        `${this.baseUrl}/TodoItems/${id}`,
+      );
+
+      return deleteTodo;
+    } catch (error) {
+      throw new Error(error);
+    }
+  };
+}
