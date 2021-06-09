@@ -6,6 +6,8 @@ restore:
 	dotnet restore
 test:
 	dotnet test
+test-pact:
+	dotnet test Todo.ContractTests
 watch:
 	dotnet watch run --project Todo.App
 start:
