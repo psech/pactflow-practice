@@ -23,6 +23,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:pact": "dotenv react-scripts test --testTimeout 30000 pact/*.spec.ts",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -42,5 +43,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@pact-foundation/pact": "^9.15.5",
+    "@pact-foundation/pact-node": "^10.12.2",
+    "dotenv-cli": "^4.0.0"
   }
 }
