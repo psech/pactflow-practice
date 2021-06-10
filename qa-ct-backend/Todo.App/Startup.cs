@@ -1,4 +1,3 @@
-// Unused usings removed
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,9 +6,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Todo.App.Models;
 using System;
-using System.Linq;
-using Microsoft.AspNetCore.Http;
 using Microsoft.OpenApi.Models;
+using Todo.App.Repository;
 
 namespace Todo.App
 {
@@ -42,6 +40,8 @@ namespace Todo.App
           builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
         });
       });
+
+      services.AddScoped<ITodoRepository, TodoRepository>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
