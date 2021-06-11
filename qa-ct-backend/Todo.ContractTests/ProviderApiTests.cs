@@ -36,6 +36,9 @@ namespace Todo.ContractTests
       _webHost = WebHost.CreateDefaultBuilder().UseUrls(_PactServerUri).UseStartup<TestStartup>().Build();
       _webHost.Start();
 
+      IWebHost webHostProvider = WebHost.CreateDefaultBuilder().UseUrls(_providerUrl).UseStartup<App.Startup>().Build();
+      webHostProvider.Start();
+
       config = new PactVerifierConfig
       {
         // NOTE: We default to using a ConsoleOutput,
