@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Todo.App.Models;
+using Todo.App.Repository;
 
 namespace Todo.ContractTests.Middleware
 {
@@ -14,17 +16,44 @@ namespace Todo.ContractTests.Middleware
     private const string ConsumerName = "qa-ct-frontend";
     private readonly RequestDelegate _next;
     private readonly IDictionary<string, Action> _providerStates;
+    private ITodoRepository _todoRepository;
 
-    public ProviderStateMiddleware(RequestDelegate next)
+    public ProviderStateMiddleware(RequestDelegate next, ITodoRepository repository)
     {
+      _todoRepository = repository;
       _next = next;
       _providerStates = new Dictionary<string, Action> {
-        {"Provider health chack", DoSomething}
+        {"todos exists", AddTodos},
+        {"todo id=100 exists", AddTodo}
       };
     }
-    private void DoSomething()
+    private void AddTodos()
     {
-      // Test data
+      _todoRepository.CreateTodoItem(new TodoItem()
+      {
+        Id = 100,
+        Text = "A todo task 1",
+        Completed = false,
+        DateAdded = DateTime.Now
+      });
+      _todoRepository.CreateTodoItem(new TodoItem()
+      {
+        Id = 101,
+        Text = "A todo task 2",
+        Completed = true,
+        DateAdded = DateTime.Now
+      });
+    }
+
+    private void AddTodo()
+    {
+      _todoRepository.CreateTodoItem(new TodoItem()
+      {
+        Id = 100,
+        Completed = false,
+        Text = "A todo task 1",
+        DateAdded = DateTime.Now
+      });
     }
 
     public async Task Invoke(HttpContext context)
