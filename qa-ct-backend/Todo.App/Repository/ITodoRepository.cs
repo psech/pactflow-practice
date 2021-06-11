@@ -6,7 +6,6 @@ namespace Todo.App.Repository
   public interface ITodoRepository
   {
     IEnumerable<TodoItem> GetTodoItems();
-
     TodoItem GetTodoItem(long id);
     void CreateTodoItem(TodoItem todo);
     void UpdateTodoItem(long id, TodoItem todo);

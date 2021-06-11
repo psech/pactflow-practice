@@ -13,7 +13,7 @@ namespace Todo.App.Controllers
   {
     private readonly ITodoRepository _todoRepository;
 
-    public TodoItemsController(TodoContext context, ITodoRepository todoRepository)
+    public TodoItemsController(ITodoRepository todoRepository)
     {
       _todoRepository = todoRepository ??
         throw new ArgumentNullException(nameof(todoRepository));

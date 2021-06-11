@@ -5,7 +5,9 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using PactNet;
 using PactNet.Infrastructure.Outputters;
+using Todo.App.Repository;
 using Todo.ContractTests.Helpers;
+using Todo.ContractTests.Repository;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -43,7 +45,7 @@ namespace Todo.ContractTests
         },
         // Output verbose verification logs to the test output
         Verbose = true,
-        ProviderVersion = "0.1.0",
+        ProviderVersion = "0.1.1",
         PublishVerificationResults = true
       };
 
