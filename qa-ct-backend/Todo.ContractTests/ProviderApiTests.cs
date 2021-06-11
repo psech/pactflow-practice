@@ -17,6 +17,7 @@ namespace Todo.ContractTests
   {
 
     private string _providerName { get; }
+    private string _providerVersion { get; }
     private string _consumerName { get; }
     private string _providerUrl { get; }
     private string _PactServerUri { get; }
@@ -26,8 +27,8 @@ namespace Todo.ContractTests
 
     public ProviderApiTests(ITestOutputHelper output)
     {
-      _outputHelper = output;
       _providerName = "qa-ct-backend";
+      _providerVersion = "0.1.1";
       _consumerName = "qa-ct-frontend";
       _providerUrl = "http://localhost:9000";
       _PactServerUri = "http://localhost:9001";
@@ -45,7 +46,7 @@ namespace Todo.ContractTests
         },
         // Output verbose verification logs to the test output
         Verbose = true,
-        ProviderVersion = "0.1.1",
+        ProviderVersion = _providerVersion,
         PublishVerificationResults = true
       };
 
@@ -59,12 +60,12 @@ namespace Todo.ContractTests
         .ProviderState($"{_PactServerUri}/provider-states")
         .ServiceProvider(_providerName, _providerUrl)
         .HonoursPactWith(_consumerName);
-      string pactUrl = System.Environment.GetEnvironmentVariable("PACT_BROKER_BASE_URL");
-      string pactToken = System.Environment.GetEnvironmentVariable("PACT_BROKER_TOKEN");
+      var pactBaseUrl = System.Environment.GetEnvironmentVariable("PACT_BROKER_BASE_URL");
+      var pactUrl = $"{pactBaseUrl}/pacts/provider/{_providerName}/consumer/{_consumerName}/version/{_providerVersion}";
+      var pactToken = System.Environment.GetEnvironmentVariable("PACT_BROKER_TOKEN");
       _pactVerifier.PactUri(pactUrl, new PactUriOptions(pactToken));
 
       _pactVerifier.Verify();
-
     }
 
     #region IDisposable Support
