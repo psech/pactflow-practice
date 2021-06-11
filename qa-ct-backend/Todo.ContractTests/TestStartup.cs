@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Todo.App.Repository;
 using Todo.ContractTests.Middleware;
+using Todo.ContractTests.Repository;
 
 namespace Todo.ContractTests
 {
@@ -22,6 +24,8 @@ namespace Todo.ContractTests
       {
         options.AllowSynchronousIO = true;
       });
+
+      services.AddTransient<ITodoRepository, TodoRepositoryFakeForContract>();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
