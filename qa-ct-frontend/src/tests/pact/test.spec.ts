@@ -13,7 +13,7 @@ import { API } from '../../api/api';
 const opts: PublisherOptions = {
   pactBroker: process.env.PACT_BROKER_BASE_URL || '',
   pactBrokerToken: process.env.PACT_BROKER_TOKEN,
-  consumerVersion: '0.1.1',
+  consumerVersion: '0.1.2',
   pactFilesOrDirs: ['./pacts'],
 };
 
@@ -84,18 +84,18 @@ describe('Pact with TODO API', () => {
     });
   });
 
-  describe('given the todo ID 100 exists', () => {
-    describe('when a GET /api/TodoItems/100 call to the API is made', () => {
-      it('todos ID 100 exists', async () => {
+  describe('given the todo ID 102 exists', () => {
+    describe('when a GET /api/TodoItems/102 call to the API is made', () => {
+      it('todos ID 102 exists', async () => {
         // Arrange
-        const expectedTodo: ITodo = getMockTodo();
+        const expectedTodo: ITodo = getMockTodo({ id: 102 });
 
         const interactionObject: InteractionObject = {
-          state: 'todo id=100 exists',
-          uponReceiving: 'a request to get todo id=100',
+          state: 'todo id=102 exists',
+          uponReceiving: 'a request to get todo id=102',
           withRequest: {
             method: 'GET',
-            path: '/api/TodoItems/100',
+            path: '/api/TodoItems/102',
           },
           willRespondWith: {
             status: 200,
@@ -113,7 +113,7 @@ describe('Pact with TODO API', () => {
 
         // Act
         const api = new API(`${mockProvider.mockService.baseUrl}/api`);
-        const todo = await api.getTodo(100);
+        const todo = await api.getTodo(102);
 
         // Assert
         expect(todo).toStrictEqual(expectedTodo);

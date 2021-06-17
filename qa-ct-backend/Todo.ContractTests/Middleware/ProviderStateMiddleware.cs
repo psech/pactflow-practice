@@ -23,8 +23,8 @@ namespace Todo.ContractTests.Middleware
       _todoRepository = repository;
       _next = next;
       _providerStates = new Dictionary<string, Action> {
-        {"todos exists", AddTodos},
-        {"todo id=100 exists", AddTodo}
+        { "todos exists", AddTodos },
+        { "todo id=102 exists", AddTodo }
       };
     }
     private void AddTodos()
@@ -49,7 +49,7 @@ namespace Todo.ContractTests.Middleware
     {
       _todoRepository.CreateTodoItem(new TodoItem()
       {
-        Id = 100,
+        Id = 102,
         Completed = false,
         Text = "A todo task 1",
         DateAdded = DateTime.Now
