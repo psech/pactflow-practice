@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using dotenv.net;
-using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using PactNet;
 using PactNet.Infrastructure.Outputters;
-using Todo.App.Repository;
 using Todo.ContractTests.Helpers;
-using Todo.ContractTests.Repository;
+using Todo.ContractTests.Middleware;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -15,16 +16,23 @@ namespace Todo.ContractTests
 {
   public class ProviderApiTests : IDisposable
   {
-
     private string _providerName { get; }
     private string _providerVersion { get; }
     private string _consumerName { get; }
     private string _providerUrl { get; }
     private string _pactServerUri { get; }
-    private IWebHost _webHost { get; }
-    private IWebHost _webHostProvider { get; }
+    private IHost _webHost { get; }
+    private IHost _webHostProvider { get; }
     private ITestOutputHelper _outputHelper { get; }
     private PactVerifierConfig _config;
+    private IConfiguration Configuration { get; set; }
+
+    private static IConfigurationRoot CreateConfiguration()
+    {
+      return new ConfigurationBuilder()
+        .AddEnvironmentVariables()
+        .Build();
+    }
 
     public ProviderApiTests(ITestOutputHelper output)
     {
@@ -32,32 +40,63 @@ namespace Todo.ContractTests
       _providerName = "qa-ct-backend";
       _providerVersion = "0.1.2";
       _consumerName = "qa-ct-frontend";
-      _providerUrl = "http://localhost:5001";
-      _pactServerUri = "http://localhost:9001";
+      _providerUrl = "http://localhost:5012";
+      _pactServerUri = "http://localhost:9012";
 
-      _webHost = WebHost.CreateDefaultBuilder().UseUrls(_pactServerUri).UseStartup<TestStartup>().Build();
-      _webHost.Start();
+      Configuration = CreateConfiguration();
 
-      // Starting the provider service; it could be done also in pipeline using dotnet run
-      // If removed please remember to also ament the Dispose(bool disposing) method
-      _webHostProvider = WebHost.CreateDefaultBuilder().UseUrls(_providerUrl).UseStartup<App.Startup>().Build();
-      _webHostProvider.Start();
+      if (_webHost == null)
+      {
+        _webHost = Host.CreateDefaultBuilder()
+          .ConfigureWebHostDefaults(builder =>
+          {
+            builder
+              .UseStartup<TestStartup>()
+              .Configure(ConfigureWithCustomMiddleware)
+              .UseUrls(_pactServerUri)
+              .UseKestrel(o => o.AllowSynchronousIO = true);
+          })
+          .Build();
+        _webHost.Start();
+      }
+
+      if (_webHostProvider == null)
+      {
+        _webHostProvider = Host.CreateDefaultBuilder()
+          .ConfigureWebHostDefaults(builder =>
+          {
+            builder
+              .UseStartup<TestStartup>()
+              .Configure(Configure)
+              .UseUrls(_providerUrl)
+              .UseKestrel(o => o.AllowSynchronousIO = true);
+          })
+          .Build();
+        _webHostProvider.Start();
+      }
 
       _config = new PactVerifierConfig
       {
-        // NOTE: We default to using a ConsoleOutput,
-        // however xUnit 2 does not capture the console output,
-        // so a custom outputter is required.
         Outputters = new List<IOutput> {
           new XUnitOutput(_outputHelper)
         },
-        // Output verbose verification logs to the test output
         Verbose = true,
         ProviderVersion = _providerVersion,
         PublishVerificationResults = true
       };
 
       DotEnv.Fluent().WithExceptions().WithProbeForEnv().Load();
+    }
+
+    private void Configure(IApplicationBuilder app)
+    {
+      app.UseMvc();
+    }
+
+    private void ConfigureWithCustomMiddleware(IApplicationBuilder app)
+    {
+      app.UseMiddleware<ProviderStateMiddleware>();
+      Configure(app);
     }
 
     [Fact]
@@ -73,7 +112,6 @@ namespace Todo.ContractTests
       _pactVerifier.PactUri(pactUrl, new PactUriOptions(pactToken));
 
       _pactVerifier.Verify();
-      // _pactVerifier.Verify(description: "a request to get todo id=102", providerState: "todo id=102 exists");
     }
 
     #region IDisposable Support

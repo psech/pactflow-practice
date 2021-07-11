@@ -9,7 +9,7 @@ namespace Todo.App.Controllers
 {
   [Route("api/TodoItems")]
   [ApiController]
-  public class TodoItemsController : ControllerBase
+  public class TodoItemsController : Controller
   {
     private readonly ITodoRepository _todoRepository;
 

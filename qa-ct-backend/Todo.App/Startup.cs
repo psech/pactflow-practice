@@ -22,11 +22,9 @@ namespace Todo.App
 
     public IConfiguration Configuration { get; }
 
-    public void ConfigureServices(IServiceCollection services)
+    public virtual void ConfigureServices(IServiceCollection services)
     {
       services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase("TodoList"));
-      services.AddControllers();
-
       services.AddSwaggerGen(c =>
       {
         c.EnableAnnotations();
@@ -42,6 +40,8 @@ namespace Todo.App
       });
 
       services.AddScoped<ITodoRepository, TodoRepository>();
+      services.AddMvc(option => option.EnableEndpointRouting = false);
+      services.AddControllers();
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,10 +1,8 @@
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Todo.App.Controllers;
 using Todo.App.Repository;
-using Todo.ContractTests.Middleware;
 using Todo.ContractTests.Repository;
 
 namespace Todo.ContractTests
@@ -19,20 +17,18 @@ namespace Todo.ContractTests
 
     public void ConfigureServices(IServiceCollection services)
     {
-      services.AddControllers();
-      services.Configure<KestrelServerOptions>(options =>
+      services.AddMvc(option =>
       {
-        options.AllowSynchronousIO = true;
-      });
+        option.EnableEndpointRouting = false;
+      }).AddNewtonsoftJson()
+        .AddApplicationPart(typeof(TodoItemsController).Assembly);
 
-      services.AddTransient<ITodoRepository, TodoRepositoryFakeForContract>();
+      services.AddSingleton<ITodoRepository>(TodoRepositoryFakeForContract.GetInstance());
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+    // Asp.netcore runtime requires a public method named Configure when startup class is used.
+    public void Configure(IApplicationBuilder app)
     {
-      app.UseRouting();
-      app.UseMiddleware<ProviderStateMiddleware>();
-      app.UseEndpoints(endpoints => endpoints.MapControllers());
     }
   }
 }
